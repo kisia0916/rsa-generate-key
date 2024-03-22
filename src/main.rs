@@ -47,13 +47,14 @@ fn genarate_random_prime_num()->(i32,i32){
         p2s:10,
         p2l:rand.gen_range(11..80)
     };
-    while p_rand_range.p1l == p_rand_range.p2l {
-        p_rand_range.p2l = rand.gen_range(11..80);
-    }
     let p1_rand:i32 = rand.gen_range(p_rand_range.p1s..p_rand_range.p1l);
-    let p2_rand:i32 = rand.gen_range(p_rand_range.p2s..p_rand_range.p2l);
+    let mut p2_rand:i32 = rand.gen_range(p_rand_range.p2s..p_rand_range.p2l);
+    while p1_rand == p2_rand {
+        p2_rand = rand.gen_range(p_rand_range.p2s..p_rand_range.p2l);
+    }
     let p1:i32 = generate_prime_num(p1_rand as usize);
     let p2:i32 = generate_prime_num(p2_rand as usize);
+    println!("p1:{},p2:{}",p1,p2);
     (p1,p2)
 }
 
@@ -62,7 +63,7 @@ fn generate_public_key(p1:i32,p2:i32)->public_key{
     let n = p1*p2;
     let mut e = 0;
     for i in rand.gen_range(10..30)..n{
-        if n%i != 0{
+        if n%i != 0 && i%2 != 0{
             e = i;
             break;
         }
