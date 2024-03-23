@@ -61,9 +61,10 @@ fn genarate_random_prime_num()->(i32,i32){
 fn generate_public_key(p1:i32,p2:i32)->public_key{
     let mut rand = rand::thread_rng();
     let n = p1*p2;
+    let ln = (p1-1)*(p2-1);
     let mut e = 0;
     for i in rand.gen_range(10..30)..n{
-        if n%i != 0 && i%2 != 0{
+        if ln%i != 0 && i%2 != 0{
             e = i;
             break;
         }
@@ -73,7 +74,15 @@ fn generate_public_key(p1:i32,p2:i32)->public_key{
 fn generate_private_key(p1:i32,p2:i32,e:i32)->private_key{
     let mut rand = rand::thread_rng();
     let n = ((p1 - 1)*(p2 - 1)) as u64;
-    let d= (rand.gen_range(2..3)*n+1)/(e as u64);
+    // let d= (rand.gen_range(2..3)*n+1)/(e as u64);
+    println!("{}",n);
+    println!("{}",e);
+    let mut i = 0;
+    // let d = (n-1)/(e as u64);
+    while (n*i-1)%(e as u64) != 0 {
+        i+=1;
+    }
+    let d = i;
     private_key{d}
 }
 fn find_mod(n: u128,k:u128) -> u128 {
